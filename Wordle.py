@@ -29,22 +29,37 @@ def wordle():
         if (inputWord.lower() in FIVE_LETTER_WORDS):
 
             # UPDATE KEYBOARD COLORS
-            
+            #for letter in inputWord :
+                #gw.set_key_color(letter, )
+
             # TEST IF THE WORD IS CORRECT
             if (inputWord == word):
                 #COLOR ALL LETTERS GREEN
                 for x in range(0, N_COLS):
                     gw.set_square_color(WordleGWindow.get_current_row(gw), x, CORRECT_COLOR)
+                    # UPDATE THE KEYBOARD COLORS
+                    for letter in inputWord :
+                        gw.set_key_color(letter, CORRECT_COLOR)
                 gw.show_message("You Guessed the Word!")
             else:
                 # COLOR THE LETTERS
                 for x in range(0, N_COLS):
-                    # START BY COLORING ALL LETTERS THAT ARE PRESENT YELLOW
-                    if(inputWord[x] in word):
-                        gw.set_square_color(WordleGWindow.get_current_row(gw), x, PRESENT_COLOR)
-                    # UPGRADE LETTERS IN THE CORRECT POSITION TO GREEN
+                    # SET LETTERS IN THE CORRECT POSITION TO GREEN
                     if (inputWord[x] == word[x]):
                         gw.set_square_color(WordleGWindow.get_current_row(gw), x, CORRECT_COLOR)
+                        # ADD MATCHING COLOR TO KEYBOARD
+                        gw.set_key_color(inputWord[x], CORRECT_COLOR)
+                    # COLOR PRESENT LETTERS IN WRONG POSITION YELLOW
+                    elif(inputWord[x] in word):
+                        gw.set_square_color(WordleGWindow.get_current_row(gw), x, PRESENT_COLOR)
+                        # ADD MATCHING COLOR TO KEYBOARD
+                        gw.set_key_color(inputWord[x], PRESENT_COLOR)
+                    # COLOR UNUSED LETTERS GREY
+                    else:
+                        gw.set_square_color(WordleGWindow.get_current_row(gw), x, MISSING_COLOR)
+                        # ADD MATCHING COLOR TO KEYBOARD
+                        gw.set_key_color(inputWord[x], MISSING_COLOR)
+
                 # SELECT NEXT ROWS
                 WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
         else:
