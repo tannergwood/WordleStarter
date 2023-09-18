@@ -9,7 +9,7 @@ BE SURE TO UPDATE THIS COMMENT WHEN YOU WRITE THE CODE.
 
 import random
 from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
+from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, KEY_COLOR
 
 # MAKE THE GAME END ONCE THERE ARE SIX GUESSES
 def wordle():
@@ -27,13 +27,24 @@ def wordle():
 
         #MILESTONE 2 MAKE SURE THE WORD IS AN ENGLISH WORD
         if (inputWord.lower() in FIVE_LETTER_WORDS):
+
+            # UPDATE KEYBOARD COLORS
             
             # TEST IF THE WORD IS CORRECT
             if (inputWord == word):
                 #COLOR ALL LETTERS GREEN
+                for x in range(0, N_COLS):
+                    gw.set_square_color(WordleGWindow.get_current_row(gw), x, CORRECT_COLOR)
                 gw.show_message("You Guessed the Word!")
             else:
                 # COLOR THE LETTERS
+                for x in range(0, N_COLS):
+                    # START BY COLORING ALL LETTERS THAT ARE PRESENT YELLOW
+                    if(inputWord[x] in word):
+                        gw.set_square_color(WordleGWindow.get_current_row(gw), x, PRESENT_COLOR)
+                    # UPGRADE LETTERS IN THE CORRECT POSITION TO GREEN
+                    if (inputWord[x] == word[x]):
+                        gw.set_square_color(WordleGWindow.get_current_row(gw), x, CORRECT_COLOR)
                 # SELECT NEXT ROWS
                 WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
         else:
