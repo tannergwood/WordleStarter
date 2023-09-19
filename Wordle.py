@@ -40,7 +40,7 @@ def wordle():
                     # UPDATE THE KEYBOARD COLORS
                     for letter in inputWord :
                         gw.set_key_color(letter, CORRECT_COLOR)
-                gw.show_message("You Guessed the Word!")
+                gw.show_message("Congrats! You Won!")
             else:
                 # COLOR THE LETTERS
                 for x in range(0, N_COLS):
@@ -60,6 +60,7 @@ def wordle():
                         # ADD MATCHING COLOR TO KEYBOARD
                         gw.set_key_color(inputWord[x], MISSING_COLOR)
 
+                # IF 6TH ROW, END THE GAME
                 # SELECT NEXT ROWS
                 WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
         else:
@@ -67,16 +68,13 @@ def wordle():
                 gw.show_message("Enter a word")
             else:
                 gw.show_message("Not in word list")
-                # CLEAR THE ROW REMAIN IN THE SAME ROW
-                for x in range(0, N_COLS):
-                    WordleGWindow.set_square_letter(gw, WordleGWindow.get_current_row(gw), x, "")
-                WordleGWindow.set_current_row(gw, WordleGWindow.get_current_row(gw))
+                # REMAIN IN THE SAME ROW
 
 
     gw = WordleGWindow()
 
     
-
+    #### MILESTONE 1 #######
     #LOOP THROUGH AND PLACE LETTERS FROM WORD INTO FIRST ROW OF WORDLE
     colLoop = N_COLS
     rowLoop = N_ROWS
