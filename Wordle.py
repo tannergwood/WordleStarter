@@ -15,7 +15,9 @@ from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT
 def wordle():
     # SELECT A RANDOM WORD and MAKE IT UPPERCASE
     word = random.choice(FIVE_LETTER_WORDS).upper()
+    word = "GLASS"
     print(word)
+
 
     def enter_action(s):
 
@@ -25,12 +27,13 @@ def wordle():
             letter = WordleGWindow.get_square_letter(gw, WordleGWindow.get_current_row(gw), x)
             inputWord = inputWord + letter
 
+        # LIST TO KEEP TRACK OF DOUBLE LETTERS BEING USED UP
+        doubleLetterList = []
+        for letter in word :
+            doubleLetterList += letter
+
         #MILESTONE 2 MAKE SURE THE WORD IS AN ENGLISH WORD
         if (inputWord.lower() in FIVE_LETTER_WORDS):
-
-            # UPDATE KEYBOARD COLORS
-            #for letter in inputWord :
-                #gw.set_key_color(letter, )
 
             # TEST IF THE WORD IS CORRECT
             if (inputWord == word):
@@ -45,24 +48,33 @@ def wordle():
                 # COLOR THE LETTERS
                 for x in range(0, N_COLS):
                     # SET LETTERS IN THE CORRECT POSITION TO GREEN
-                    if (inputWord[x] == word[x]):
+                    if ((inputWord[x] == word[x]) & (inputWord[x] in doubleLetterList)):
                         gw.set_square_color(WordleGWindow.get_current_row(gw), x, CORRECT_COLOR)
                         # ADD MATCHING COLOR TO KEYBOARD
                         gw.set_key_color(inputWord[x], CORRECT_COLOR)
-                    # COLOR PRESENT LETTERS IN WRONG POSITION YELLOW
-                    elif(inputWord[x] in word):
+                        # REMOVE USED LETTER FROM THE DOUBLE LETTER LIST
+                        doubleLetterList[x] = "?"
+                # COLOR PRESENT LETTERS IN WRONG POSITION YELLOW
+                for x in range(0, N_COLS):
+                    if((inputWord[x] in word) & (inputWord[x] in doubleLetterList) & (inputWord[x] != word[x])):
                         gw.set_square_color(WordleGWindow.get_current_row(gw), x, PRESENT_COLOR)
                         # ADD MATCHING COLOR TO KEYBOARD
                         gw.set_key_color(inputWord[x], PRESENT_COLOR)
-                    # COLOR UNUSED LETTERS GREY
-                    else:
+                        # REMOVE USED LETTER FROM THE DOUBLE LETTER LIST
+                        letterIndex = doubleLetterList.index(inputWord[x])
+                        doubleLetterList[letterIndex] = "?"
+                # COLOR UNUSED LETTERS GREY
+                for x in range(0, N_COLS):
+                    if ((gw.get_square_color(WordleGWindow.get_current_row(gw), x) != CORRECT_COLOR) & (gw.get_square_color(WordleGWindow.get_current_row(gw), x) != PRESENT_COLOR)):
                         gw.set_square_color(WordleGWindow.get_current_row(gw), x, MISSING_COLOR)
                         # ADD MATCHING COLOR TO KEYBOARD
                         gw.set_key_color(inputWord[x], MISSING_COLOR)
 
+
                 # IF 6TH ROW, END THE GAME
                 if WordleGWindow.get_current_row(gw) == 5:
-                    gw.show_message("Sorry, You Lost!")
+                    lossMessage = "Sorry, You Lost! The word was: " + word
+                    gw.show_message(lossMessage)
                 else:
                     # SELECT NEXT ROWS
                     WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
