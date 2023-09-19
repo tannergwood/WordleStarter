@@ -23,7 +23,7 @@ KEY_COLOR = "#DDDDDD"           # Keys are colored light gray
 
 # INV_CORRECT_COLOR = "994499"
 
-CANVAS_WIDTH = 500		# Width of the tkinter canvas (pixels)
+CANVAS_WIDTH = 700		# Width of the tkinter canvas (pixels)
 CANVAS_HEIGHT = 700		# Height of the tkinter canvas (pixels)
 
 SQUARE_SIZE = 60		# Size of each square (pixels)
@@ -49,6 +49,12 @@ KEY_LABELS = [
     [ "ENTER", "Z", "X", "C", "V", "B", "N", "M", "DELETE" ]
 ]
 
+KEY_LABELS_ESP = [
+    [ "Q", "W", "E", "R", "T", "T", "U", "É", "I", "Í", "O",  "P" ],
+    [ "A", "Á", "S", "D", "F", "G", "H", "J", "K", "L", "Ñ" ],
+    [ "ENT", "Z", "X", "C", "Ç", "V", "B", "N", "M", "Ú", "Ó", "DEL"]
+]
+
 CLICK_MAX_DISTANCE = 2
 CLICK_MAX_DELAY = 0.5
 
@@ -65,7 +71,7 @@ class WordleGWindow:
 
     def __init__(self):
         """Creates the Wordle window."""
-
+            
         def create_grid():
             return [
                 [
