@@ -61,8 +61,11 @@ def wordle():
                         gw.set_key_color(inputWord[x], MISSING_COLOR)
 
                 # IF 6TH ROW, END THE GAME
-                # SELECT NEXT ROWS
-                WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
+                if WordleGWindow.get_current_row(gw) == 5:
+                    gw.show_message("Sorry, You Lost!")
+                else:
+                    # SELECT NEXT ROWS
+                    WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
         else:
             if inputWord == "     ":
                 gw.show_message("Enter a word")
@@ -76,8 +79,8 @@ def wordle():
     
     #### MILESTONE 1 #######
     #LOOP THROUGH AND PLACE LETTERS FROM WORD INTO FIRST ROW OF WORDLE
-    colLoop = N_COLS
-    rowLoop = N_ROWS
+    # colLoop = N_COLS
+    # rowLoop = N_ROWS
     # for x in word:
     #     WordleGWindow.set_square_letter(gw, N_ROWS - rowLoop, N_COLS - colLoop, x)
     #     colLoop = colLoop - 1
