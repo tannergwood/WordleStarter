@@ -8,15 +8,33 @@ BE SURE TO UPDATE THIS COMMENT WHEN YOU WRITE THE CODE.
 # This is Nate's test comment
 
 import random
-from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, KEY_COLOR
+import time
+import tkinter
+from WordleDictionary import FIVE_LETTER_WORDS, FIVE_LETTER_WORDS_ESP
+from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, KEY_COLOR, selected_language, selected_color_scheme
 
 # MAKE THE GAME END ONCE THERE ARE SIX GUESSES
 def wordle():
+
+
     # SELECT A RANDOM WORD and MAKE IT UPPERCASE
-    word = random.choice(FIVE_LETTER_WORDS).upper()
-    word = "GLASS"
-    print(word)
+    if selected_language == "English":
+        wordList = FIVE_LETTER_WORDS
+        word = random.choice(wordList).upper()
+        word = "GLASS"
+        notinwordlist = "Not in word list"
+        enteraword = "Enter a word"
+        youwon = "Congrats! You guessed the word!"
+        youlost = "Sorry, You Lost! The word was: "
+        print(word)
+    else :
+        wordList = FIVE_LETTER_WORDS_ESP
+        word = random.choice(wordList).upper()
+        notinwordlist = "No en la lista de palabras"
+        enteraword = "Poner una palabra"
+        youwon = "¡Felicitaciones! adivinaste la palabra!"
+        youlost = "¡Perdón que perdiste! la palabra era: "
+        print(word)
 
 
     def enter_action(s):
@@ -32,8 +50,8 @@ def wordle():
         for letter in word :
             doubleLetterList += letter
 
-        #MILESTONE 2 MAKE SURE THE WORD IS AN ENGLISH WORD
-        if (inputWord.lower() in FIVE_LETTER_WORDS):
+        #MILESTONE 2 MAKE SURE THE WORD IS AN ENGLISH/SPANISH WORD
+        if (inputWord.lower() in wordList):
 
             # TEST IF THE WORD IS CORRECT
             if (inputWord == word):
@@ -43,7 +61,8 @@ def wordle():
                     # UPDATE THE KEYBOARD COLORS
                     for letter in inputWord :
                         gw.set_key_color(letter, CORRECT_COLOR)
-                gw.show_message("Congrats! You Won!")
+                gw.show_message(youwon)
+                time.sleep(5)
             else:
                 # COLOR THE LETTERS
                 for x in range(0, N_COLS):
@@ -73,16 +92,16 @@ def wordle():
 
                 # IF 6TH ROW, END THE GAME
                 if WordleGWindow.get_current_row(gw) == 5:
-                    lossMessage = "Sorry, You Lost! The word was: " + word
+                    lossMessage = youlost + word
                     gw.show_message(lossMessage)
                 else:
                     # SELECT NEXT ROWS
                     WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
         else:
             if inputWord == "     ":
-                gw.show_message("Enter a word")
+                gw.show_message(enteraword)
             else:
-                gw.show_message("Not in word list")
+                gw.show_message(notinwordlist)
                 # REMAIN IN THE SAME ROW
 
 

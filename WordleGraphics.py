@@ -10,6 +10,89 @@ import math
 import time
 import tkinter
 
+###########################################
+
+
+import tkinter as tk
+
+# Function to save the selected choices to variables and close the window
+def save_choices_and_close():
+    global selected_language
+    global selected_color_scheme
+
+    selected_language = language_var.get()
+    selected_color_scheme = color_scheme_var.get()
+
+    if selected_language and selected_color_scheme:
+        root.destroy()  # Close the tkinter window
+    else:
+        error_label.config(text="Please select both language and color scheme.")
+
+
+# Create the main tkinter window
+root = tk.Tk()
+root.title("Language and Color Scheme Selection")
+root.geometry("400x500")
+
+# Create variables to store the selected language and color scheme
+selected_language = None
+selected_color_scheme = None
+
+# Create a label to display the selected language and color scheme
+language_label = tk.Label(root, text="", font=("Arial", 12))
+language_label.pack(pady=10)
+
+color_scheme_label = tk.Label(root, text="", font=("Arial", 12))
+color_scheme_label.pack(pady=10)
+
+# Create radio buttons for language selection
+language_frame = tk.Frame(root)
+language_frame.pack(pady=10)
+
+language_label = tk.Label(language_frame, text="Select Language:")
+language_label.pack()
+
+language_var = tk.StringVar()
+
+english_radio = tk.Radiobutton(language_frame, text="English", variable=language_var, value="English")
+english_radio.pack()
+
+spanish_radio = tk.Radiobutton(language_frame, text="Spanish", variable=language_var, value="Spanish")
+spanish_radio.pack()
+
+# Create radio buttons for color scheme selection
+color_scheme_frame = tk.Frame(root)
+color_scheme_frame.pack(pady=10)
+
+color_scheme_label = tk.Label(color_scheme_frame, text="Select Color Scheme:")
+color_scheme_label.pack()
+
+color_scheme_var = tk.StringVar()
+
+original_radio = tk.Radiobutton(color_scheme_frame, text="Original", variable=color_scheme_var, value="Original")
+original_radio.pack()
+
+dark_scheme_radio = tk.Radiobutton(color_scheme_frame, text="Dark Scheme", variable=color_scheme_var, value="Dark Scheme")
+dark_scheme_radio.pack()
+
+# Create an error label to display validation errors
+error_label = tk.Label(root, text="", font=("Arial", 12), fg="red")
+error_label.pack(pady=10)
+
+# Create a button to save choices and close the window
+save_button = tk.Button(root, text="Save Choices", command=save_choices_and_close)
+save_button.pack(pady=20)
+
+# Start the tkinter main loop
+root.mainloop()
+
+# You can now use selected_language and selected_color_scheme in your code
+print("Selected Language:", selected_language)
+print("Selected Color Scheme:", selected_color_scheme)
+
+
+
+###########################################
 # Constants
 
 N_ROWS = 6			# Number of rows
@@ -50,9 +133,9 @@ KEY_LABELS = [
 ]
 
 KEY_LABELS_ESP = [
-    [ "Q", "W", "E", "R", "T", "T", "U", "É", "I", "Í", "O",  "P" ],
+    [ "Q", "W", "E", "R", "T", "U", "É", "I", "Í", "O", "Ó", "P" ],
     [ "A", "Á", "S", "D", "F", "G", "H", "J", "K", "L", "Ñ" ],
-    [ "ENT", "Z", "X", "C", "Ç", "V", "B", "N", "M", "Ú", "Ó", "DEL"]
+    [ "ENT", "Z", "X", "C", "Ç", "V", "B", "N", "M", "Ú",  "DEL"]
 ]
 
 CLICK_MAX_DISTANCE = 2
@@ -80,23 +163,42 @@ class WordleGWindow:
             ]
 
         def create_keyboard():
-            keys = { }
-            nk = len(KEY_LABELS[0])
-            h = KEY_HEIGHT
-            y0 = CANVAS_HEIGHT - BOTTOM_MARGIN - 3 * KEY_HEIGHT - 2 * KEY_YSEP
-            for row in range(len(KEY_LABELS)):
-                y = y0 + row * (KEY_HEIGHT + KEY_YSEP)
-                x = (CANVAS_WIDTH - nk * KEY_WIDTH - (nk - 1) * KEY_XSEP) / 2
-                if row == 1:
-                    x += (KEY_WIDTH + KEY_XSEP) / 2
-                for col in range(len(KEY_LABELS[row])):
-                    label = KEY_LABELS[row][col]
-                    w = KEY_WIDTH
-                    if len(label) > 1:
-                        w += (KEY_WIDTH + KEY_XSEP) / 2
-                    keys[label] = WordleKey(self._canvas, x, y, w, h, label)
-                    x += w + KEY_XSEP
-            return keys
+            if selected_language == "English":
+                keys = { }
+                nk = len(KEY_LABELS[0])
+                h = KEY_HEIGHT
+                y0 = CANVAS_HEIGHT - BOTTOM_MARGIN - 3 * KEY_HEIGHT - 2 * KEY_YSEP
+                for row in range(len(KEY_LABELS)):
+                    y = y0 + row * (KEY_HEIGHT + KEY_YSEP)
+                    x = (CANVAS_WIDTH - nk * KEY_WIDTH - (nk - 1) * KEY_XSEP) / 2
+                    if row == 1:
+                        x += (KEY_WIDTH + KEY_XSEP) / 2
+                    for col in range(len(KEY_LABELS[row])):
+                        label = KEY_LABELS[row][col]
+                        w = KEY_WIDTH
+                        if len(label) > 1:
+                            w += (KEY_WIDTH + KEY_XSEP) / 2
+                        keys[label] = WordleKey(self._canvas, x, y, w, h, label)
+                        x += w + KEY_XSEP
+                return keys
+            else :
+                keys = { }
+                nk = len(KEY_LABELS_ESP[0])
+                h = KEY_HEIGHT
+                y0 = CANVAS_HEIGHT - BOTTOM_MARGIN - 3 * KEY_HEIGHT - 2 * KEY_YSEP
+                for row in range(len(KEY_LABELS_ESP)):
+                    y = y0 + row * (KEY_HEIGHT + KEY_YSEP)
+                    x = (CANVAS_WIDTH - nk * KEY_WIDTH - (nk - 1) * KEY_XSEP) / 2
+                    if row == 1:
+                        x += (KEY_WIDTH + KEY_XSEP) / 2
+                    for col in range(len(KEY_LABELS_ESP[row])):
+                        label = KEY_LABELS_ESP[row][col]
+                        w = KEY_WIDTH
+                        if len(label) > 1:
+                            w += (KEY_WIDTH + KEY_XSEP) / 2
+                        keys[label] = WordleKey(self._canvas, x, y, w, h, label)
+                        x += w + KEY_XSEP
+                return keys
 
         def create_message():
             return WordleMessage(self._canvas,
@@ -108,13 +210,13 @@ class WordleGWindow:
                 ch = tke.upper()
             else:
                 ch = tke.char.upper()
-            if ch == "\007" or ch == "\177" or ch == "DELETE":
+            if ch == "\007" or ch == "\177" or ch == "DELETE" or ch == "DEL":
                 self.show_message("")
                 if self._row < N_ROWS and self._col > 0:
                     self._col -= 1
                     sq = self._grid[self._row][self._col]
                     sq.set_letter(" ")
-            elif ch == "\r" or ch == "\n" or ch == "ENTER":
+            elif ch == "\r" or ch == "\n" or ch == "ENTER" or ch == "ENT":
                 self.show_message("")
                 s = ""
                 for col in range(N_COLS):
