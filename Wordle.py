@@ -32,9 +32,15 @@ def wordle():
         word = random.choice(wordList).upper()
         notinwordlist = "No en la lista de palabras"
         enteraword = "Poner una palabra"
-        youwon = "¡Felicitaciones! adivinaste la palabra!"
-        youlost = "¡Perdón que perdiste! la palabra era: "
+        youwon = "¡Felicitaciones! Adivinaste la palabra!"
+        youlost = "¡Perdón que perdiste! La palabra era: "
         print(word)
+
+    # CHANGE MESSAGE COLOR BASED ON COLOR SCHEME
+    if (selected_color_scheme == "Dark Scheme"):
+        msgColor = "White"
+    else:
+        msgColor = "Black"
 
 
     def enter_action(s):
@@ -61,8 +67,9 @@ def wordle():
                     # UPDATE THE KEYBOARD COLORS
                     for letter in inputWord :
                         gw.set_key_color(letter, CORRECT_COLOR)
-                gw.show_message(youwon)
-                time.sleep(5)
+                gw.show_message(youwon, msgColor)
+                #time.sleep(5)
+                # WHAT DOES THE SLEEP DO?
             else:
                 # COLOR THE LETTERS
                 for x in range(0, N_COLS):
@@ -93,15 +100,15 @@ def wordle():
                 # IF 6TH ROW, END THE GAME
                 if WordleGWindow.get_current_row(gw) == 5:
                     lossMessage = youlost + word
-                    gw.show_message(lossMessage)
+                    gw.show_message(lossMessage, msgColor)
                 else:
                     # SELECT NEXT ROWS
                     WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
         else:
             if inputWord == "     ":
-                gw.show_message(enteraword)
+                gw.show_message(enteraword, msgColor)
             else:
-                gw.show_message(notinwordlist)
+                gw.show_message(notinwordlist, msgColor)
                 # REMAIN IN THE SAME ROW
 
 

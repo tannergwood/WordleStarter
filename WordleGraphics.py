@@ -104,7 +104,23 @@ MISSING_COLOR = "#999999"       # Gray for letters that don't appear
 UNKNOWN_COLOR = "#FFFFFF"       # Undetermined letters are white
 KEY_COLOR = "#DDDDDD"           # Keys are colored light gray
 
-# INV_CORRECT_COLOR = "994499"
+# SET COLOR MODE
+if (selected_color_scheme == "Original"):
+    CORRECT_COLOR = "#66BB66"       # Light green for correct letters
+    PRESENT_COLOR = "#CCBB66"       # Brownish yellow for misplaced letters
+    MISSING_COLOR = "#999999"       # Gray for letters that don't appear
+    UNKNOWN_COLOR = "#FFFFFF"       # Undetermined letters are white
+    KEY_COLOR = "#DDDDDD"           # Keys are colored light gray
+    BG_COLOR = "White"              # Window background is white
+
+if (selected_color_scheme == "Dark Scheme"):
+    CORRECT_COLOR = "#B0E0E6"       # Light blue for correct letters
+    PRESENT_COLOR = "#FBA100"       # Orange for misplaced letters
+    MISSING_COLOR = "#757575"       # Gray for letters that don't appear
+    UNKNOWN_COLOR = "#505050"       # Undetermined letters are gray
+    KEY_COLOR = "Dark Grey"         # Keys are colored light gray
+    BG_COLOR = "#505050"            # Window background is gray
+
 
 CANVAS_WIDTH = 700		# Width of the tkinter canvas (pixels)
 CANVAS_HEIGHT = 700		# Height of the tkinter canvas (pixels)
@@ -264,7 +280,7 @@ class WordleGWindow:
         root.protocol("WM_DELETE_WINDOW", delete_window)
         self._root = root
         canvas = tkinter.Canvas(root,
-                                bg="White",
+                                bg=BG_COLOR,
                                 width=CANVAS_WIDTH,
                                 height=CANVAS_HEIGHT,
                                 highlightthickness=0)
