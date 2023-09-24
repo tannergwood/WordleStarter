@@ -2,8 +2,13 @@
 
 """
 This module defines the dictionary of five-letter words used in
-the Wordle project.
+the Wordle project in both spanish and english
+
+SPENCER JACKLIN, WESTON EVANS, NATHAN JOHNSON, TANNER GREENWOOD
+
 """
+
+# THIS IS THE SPANISH DICTIONARY
 
 FIVE_LETTER_WORDS_ESP = [
     "bauza",

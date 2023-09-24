@@ -1,32 +1,25 @@
 # File: Wordle.py
 
 """
-This module is the starter file for the Wordle assignment.
-BE SURE TO UPDATE THIS COMMENT WHEN YOU WRITE THE CODE.
+SPENCER JACKLIN, WESTON EVANS, NATHAN JOHNSON, TANNER GREENWOOD
 """
 
-# This is Nate's test comment
 
 import random
-import time
-import tkinter
 from WordleDictionary import FIVE_LETTER_WORDS, FIVE_LETTER_WORDS_ESP
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, KEY_COLOR, selected_language, selected_color_scheme
 
 # MAKE THE GAME END ONCE THERE ARE SIX GUESSES
 def wordle():
 
-
-    # SELECT A RANDOM WORD and MAKE IT UPPERCASE
+    # SET LANGUAGE PREFERENCES AND SELECT WORD TO GUESS
     if selected_language == "English":
         wordList = FIVE_LETTER_WORDS
         word = random.choice(wordList).upper()
-        word = "GLASS"
         notinwordlist = "Not in word list"
         enteraword = "Enter a word"
         youwon = "Congrats! You guessed the word!"
         youlost = "Sorry, You Lost! The word was: "
-        print(word)
     else :
         wordList = FIVE_LETTER_WORDS_ESP
         word = random.choice(wordList).upper()
@@ -34,7 +27,6 @@ def wordle():
         enteraword = "Poner una palabra"
         youwon = "¡Felicitaciones! Adivinaste la palabra!"
         youlost = "¡Perdón que perdiste! La palabra era: "
-        print(word)
 
     # CHANGE MESSAGE COLOR BASED ON COLOR SCHEME
     if (selected_color_scheme == "Dark Scheme"):
@@ -42,6 +34,11 @@ def wordle():
     else:
         msgColor = "Black"
 
+    # ALLOW FOR KEYBOARD TO TURN OFF AFTER WINNING/LOSING TO ENSURE NO MORE GUESSING
+    def keyboard_enabler(WordleGWindow, condition):
+        WordleGWindow.enabled = condition
+
+    
 
     def enter_action(s):
 
@@ -68,8 +65,7 @@ def wordle():
                     for letter in inputWord :
                         gw.set_key_color(letter, CORRECT_COLOR)
                 gw.show_message(youwon, msgColor)
-                #time.sleep(5)
-                # WHAT DOES THE SLEEP DO?
+                keyboard_enabler(gw, False)
             else:
                 # COLOR THE LETTERS
                 for x in range(0, N_COLS):
@@ -97,14 +93,16 @@ def wordle():
                         gw.set_key_color(inputWord[x], MISSING_COLOR)
 
 
-                # IF 6TH ROW, END THE GAME
+                # IF 6TH ROW, END THE GAME, DISABLE KEYBOARD
                 if WordleGWindow.get_current_row(gw) == 5:
                     lossMessage = youlost + word
                     gw.show_message(lossMessage, msgColor)
+                    keyboard_enabler(gw, False)
                 else:
                     # SELECT NEXT ROWS
                     WordleGWindow.set_current_row(gw,WordleGWindow.get_current_row(gw) + 1)
         else:
+            # MAKE SURE THERE ARE NO BLANK WORDS ENTERED
             if inputWord == "     ":
                 gw.show_message(enteraword, msgColor)
             else:

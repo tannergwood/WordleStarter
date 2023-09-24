@@ -3,19 +3,27 @@
 """
 This file implements the WordleGWindow class, which manages the
 graphical display for the Wordle project.
+
+SPENCER JACKLIN, WESTON EVANS, NATHAN JOHNSON, TANNER GREENWOOD
+
 """
 
 import atexit
-import math
 import time
-import tkinter
-
-###########################################
-
-
 import tkinter as tk
 
-# Function to save the selected choices to variables and close the window
+# Constants
+
+N_ROWS = 6			# Number of rows
+N_COLS = 5			# Number of columns
+
+CORRECT_COLOR = "#66BB66"       # Light green for correct letters
+PRESENT_COLOR = "#CCBB66"       # Brownish yellow for misplaced letters
+MISSING_COLOR = "#999999"       # Gray for letters that don't appear
+UNKNOWN_COLOR = "#FFFFFF"       # Undetermined letters are white
+KEY_COLOR = "#DDDDDD"           # Keys are colored light gray
+
+# Function to save the language and color scheme choices to variables and close the window
 def save_choices_and_close():
     global selected_language
     global selected_color_scheme
@@ -86,23 +94,7 @@ save_button.pack(pady=20)
 # Start the tkinter main loop
 root.mainloop()
 
-# You can now use selected_language and selected_color_scheme in your code
-print("Selected Language:", selected_language)
-print("Selected Color Scheme:", selected_color_scheme)
 
-
-
-###########################################
-# Constants
-
-N_ROWS = 6			# Number of rows
-N_COLS = 5			# Number of columns
-
-CORRECT_COLOR = "#66BB66"       # Light green for correct letters
-PRESENT_COLOR = "#CCBB66"       # Brownish yellow for misplaced letters
-MISSING_COLOR = "#999999"       # Gray for letters that don't appear
-UNKNOWN_COLOR = "#FFFFFF"       # Undetermined letters are white
-KEY_COLOR = "#DDDDDD"           # Keys are colored light gray
 
 # SET COLOR MODE
 if (selected_color_scheme == "Original"):
@@ -167,18 +159,21 @@ MESSAGE_Y = TOP_MARGIN + BOARD_HEIGHT + MESSAGE_SEP
 
 class WordleGWindow:
     """This class creates the Wordle window."""
+    enabled = True
 
     def __init__(self):
         """Creates the Wordle window."""
-            
+
         def create_grid():
             return [
                 [
                     WordleSquare(canvas, i, j) for j in range(N_COLS)
                 ] for i in range(N_ROWS)
             ]
-
+        
+        
         def create_keyboard():
+            # IF ENGLISH USE ENGLISH KEYBOARD, OTHERWISE USE SPANISH
             if selected_language == "English":
                 keys = { }
                 nk = len(KEY_LABELS[0])
@@ -222,29 +217,33 @@ class WordleGWindow:
                                  MESSAGE_Y)
 
         def key_action(tke):
-            if isinstance(tke, str):
-                ch = tke.upper()
+            #MAKE SURE THE KEYBOARD IS ENABLED, IF ITS NOT ENABLED, KEYS WONT WORK
+            if not self.enabled:
+                return
             else:
-                ch = tke.char.upper()
-            if ch == "\007" or ch == "\177" or ch == "DELETE" or ch == "DEL":
-                self.show_message("")
-                if self._row < N_ROWS and self._col > 0:
-                    self._col -= 1
-                    sq = self._grid[self._row][self._col]
-                    sq.set_letter(" ")
-            elif ch == "\r" or ch == "\n" or ch == "ENTER" or ch == "ENT":
-                self.show_message("")
-                s = ""
-                for col in range(N_COLS):
-                    s += self._grid[self._row][col].get_letter();
-                for fn in self._enter_listeners:
-                    fn(s)
-            elif ch.isalpha():
-                self.show_message("")
-                if self._row < N_ROWS and self._col < N_COLS:
-                    sq = self._grid[self._row][self._col]
-                    sq.set_letter(ch)
-                    self._col += 1
+                if isinstance(tke, str):
+                    ch = tke.upper()
+                else:
+                    ch = tke.char.upper()
+                if ch == "\007" or ch == "\177" or ch == "DELETE" or ch == "DEL":
+                    self.show_message("")
+                    if self._row < N_ROWS and self._col > 0:
+                        self._col -= 1
+                        sq = self._grid[self._row][self._col]
+                        sq.set_letter(" ")
+                elif ch == "\r" or ch == "\n" or ch == "ENTER" or ch == "ENT":
+                    self.show_message("")
+                    s = ""
+                    for col in range(N_COLS):
+                        s += self._grid[self._row][col].get_letter();
+                    for fn in self._enter_listeners:
+                        fn(s)
+                elif ch.isalpha():
+                    self.show_message("")
+                    if self._row < N_ROWS and self._col < N_COLS:
+                        sq = self._grid[self._row][self._col]
+                        sq.set_letter(ch)
+                        self._col += 1
 
         def press_action(tke):
             self._down_x = tke.x
@@ -275,11 +274,11 @@ class WordleGWindow:
             """Starts the tkinter event loop when the program exits."""
             root.mainloop()
 
-        root = tkinter.Tk()
+        root = tk.Tk()
         root.title("Wordle")
         root.protocol("WM_DELETE_WINDOW", delete_window)
         self._root = root
-        canvas = tkinter.Canvas(root,
+        canvas = tk.Canvas(root,
                                 bg=BG_COLOR,
                                 width=CANVAS_WIDTH,
                                 height=CANVAS_HEIGHT,
@@ -429,7 +428,7 @@ class WordleMessage:
         self._msg = canvas.create_text(x, y,
                                        text="",
                                        font=MESSAGE_FONT,
-                                       anchor=tkinter.CENTER)
+                                       anchor=tk.CENTER)
 
     def get_text(self):
         return self._text
